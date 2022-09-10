@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/services.dart';
@@ -29,26 +28,31 @@ enum ChartboostEventListener {
 typedef ChartboostListener(ChartboostEventListener listener);
 
 class Chartboost {
-  static const MethodChannel _channel =
-      const MethodChannel('chartboost');
+  static const MethodChannel _channel = const MethodChannel('chartboost');
 
   static final Map<String, ChartboostEventListener> listeners = {
-    'shouldRequestInterstitial': ChartboostEventListener.shouldRequestInterstitial,
-    'shouldDisplayInterstitial': ChartboostEventListener.shouldDisplayInterstitial,
+    'shouldRequestInterstitial':
+        ChartboostEventListener.shouldRequestInterstitial,
+    'shouldDisplayInterstitial':
+        ChartboostEventListener.shouldDisplayInterstitial,
     'didCacheInterstitial': ChartboostEventListener.didCacheInterstitial,
-    'didFailToLoadInterstitial': ChartboostEventListener.didFailToLoadInterstitial,
+    'didFailToLoadInterstitial':
+        ChartboostEventListener.didFailToLoadInterstitial,
     'willDisplayInterstitial': ChartboostEventListener.willDisplayInterstitial,
     'didDismissInterstitial': ChartboostEventListener.didDismissInterstitial,
     'didCloseInterstitial': ChartboostEventListener.didCloseInterstitial,
     'didClickInterstitial': ChartboostEventListener.didClickInterstitial,
     'didDisplayInterstitial': ChartboostEventListener.didDisplayInterstitial,
     'didFailToRecordClick': ChartboostEventListener.didFailToRecordClick,
-    'shouldDisplayRewardedVideo': ChartboostEventListener.shouldDisplayRewardedVideo,
+    'shouldDisplayRewardedVideo':
+        ChartboostEventListener.shouldDisplayRewardedVideo,
     'didCacheRewardedVideo': ChartboostEventListener.didCacheRewardedVideo,
-    'didFailToLoadRewardedVideo': ChartboostEventListener.didFailToLoadRewardedVideo,
+    'didFailToLoadRewardedVideo':
+        ChartboostEventListener.didFailToLoadRewardedVideo,
     'didCloseRewardedVideo': ChartboostEventListener.didCloseRewardedVideo,
     'didClickRewardedVideo': ChartboostEventListener.didClickRewardedVideo,
-    'didCompleteRewardedVideo': ChartboostEventListener.didCompleteRewardedVideo,
+    'didCompleteRewardedVideo':
+        ChartboostEventListener.didCompleteRewardedVideo,
     'didDisplayRewardedVideo': ChartboostEventListener.didDisplayRewardedVideo,
     'willDisplayVideo': ChartboostEventListener.willDisplayVideo,
     'didInitialize': ChartboostEventListener.didInitialize,
@@ -56,21 +60,23 @@ class Chartboost {
 
   static Future<void> init(String appId, String appSignature) async {
     try {
-      await _channel.invokeMethod('init', {'appId': appId, 'appSignature': appSignature});
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-  
-  static Future<void> handleMethod(MethodCall call, ChartboostListener listener) async {
-    try {
-      listener(listeners[call.method]);
+      await _channel
+          .invokeMethod('init', {'appId': appId, 'appSignature': appSignature});
     } catch (e) {
       print(e.toString());
     }
   }
 
-  static Future<void> cacheInterstitial({ String location }) async {
+  static Future<void> handleMethod(
+      MethodCall call, ChartboostListener listener) async {
+    try {
+      listener(listeners[call.method]!);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static Future<void> cacheInterstitial({String? location}) async {
     try {
       await _channel.invokeMethod('cacheInterstitial', {'location': location});
     } catch (e) {
@@ -78,9 +84,11 @@ class Chartboost {
     }
   }
 
-  static Future<void> showInterstitial({ String location, ChartboostListener listener }) async {
+  static Future<void> showInterstitial(
+      {String? location, required ChartboostListener listener}) async {
     try {
-      _channel.setMethodCallHandler((MethodCall call) async => handleMethod(call, listener));
+      _channel.setMethodCallHandler(
+          (MethodCall call) async => handleMethod(call, listener));
       await _channel.invokeMethod('showInterstitial', {'location': location});
     } catch (e) {
       print(e.toString());

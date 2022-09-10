@@ -14,6 +14,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import io.flutter.plugin.platform.PlatformViewRegistry;
 
 import com.chartboost.sdk.Chartboost;
 import com.chartboost.sdk.CBLocation;
@@ -45,6 +46,7 @@ public class ChartboostPlugin implements FlutterPlugin, MethodCallHandler, Activ
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     this.flutterPluginBinding = flutterPluginBinding;
+    this.RegistrarBanner(flutterPluginBinding.getFlutterEngine().getPlatformViewsController().getRegistry());
     this.OnAttachedToEngine(flutterPluginBinding.getBinaryMessenger());
   }
 
@@ -76,27 +78,31 @@ public class ChartboostPlugin implements FlutterPlugin, MethodCallHandler, Activ
     }
   }
 
+  public void RegistrarBanner(PlatformViewRegistry registry) {
+    registry.registerViewFactory("/Banner", new BannerFactory());
+  }
+
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     try {
-        switch (call.method) {
-            case "init":
-                this.init((String) call.argument("appId"), (String) call.argument("appSignature"));
-                break;
-            case "cacheInterstitial":
-              if(call.argument("location") != null)
-                this.cacheInterstitial((String) call.argument("location"));
-              else 
-                this.cacheInterstitial();
-              break;
-            case "showInterstitial":
-              if(call.argument("location") != null)
-                this.showInterstitial((String) call.argument("location"));
-              else 
-                this.showInterstitial();
-              break;
-        }
-        result.success(Boolean.TRUE);
+      switch (call.method) {
+        case "init":
+            this.init((String) call.argument("appId"), (String) call.argument("appSignature"));
+            break;
+        case "cacheInterstitial":
+          if(call.argument("location") != null)
+            this.cacheInterstitial((String) call.argument("location"));
+          else 
+            this.cacheInterstitial();
+          break;
+        case "showInterstitial":
+          if(call.argument("location") != null)
+            this.showInterstitial((String) call.argument("location"));
+          else 
+            this.showInterstitial();
+          break;
+      }
+      result.success(Boolean.TRUE);
     } catch (Exception e) {
         Log.e("Chartboost", "Error:" + e.toString());
         result.notImplemented();

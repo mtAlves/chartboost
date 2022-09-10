@@ -31,6 +31,16 @@ Chartboost.cacheInterstitial();
 Chartboost.showInterstitial(listener: listener);
 ```
 
+### 2. Banner Widget
+
+Banner ads sizes
+    STANDARD – 320 x 50
+    MEDIUM – 300 x 250
+    LEADERBOARD – 728 x 90
+```dart
+ChartboostBanner(BannerAdSize.STANDARD, 'Default'),
+```
+
 ## Events
 ```dart
 // Called before requesting an interstitial via the Chartboost API server.
@@ -96,3 +106,11 @@ didFailToRecordClick
 didInitialize
 ```
 
+## Supported formats
+
+- Banner
+- Interstitial
+
+## Supported platforms
+
+- Android

@@ -1,3 +1,4 @@
+import 'package:chartboost/banner.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -16,13 +17,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Chartboost.init('6086e39e215211081fc6dfe8', '8eb71a4126b098c0f85b2073e2cbf37db25d3045')
-      .then((value) => Chartboost.cacheInterstitial());
+    Chartboost.init('618181cedc1e7307f1f532f9',
+            '334287e70eec872e50adf8662b445d3f68f1c424')
+        .then((value) => Chartboost.cacheInterstitial());
   }
 
   listener(ChartboostEventListener event) {
     print('EVENT: $event');
-    if(event == ChartboostEventListener.didCacheInterstitial)
+    if (event == ChartboostEventListener.didCacheInterstitial)
       print('Cached interstitial!');
   }
 
@@ -42,6 +44,10 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: Text('Show Interstitial'),
               ),
+              ChartboostBanner(BannerAdSize.STANDARD, 'Default'),
+              Container(
+                  alignment: Alignment.center,
+                  child: Text('Club de Regatas Vasco da Gama')),
             ],
           ),
         ),
